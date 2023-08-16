@@ -1,0 +1,35 @@
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAS7LKAHOQQDRS77W4
+      secretKey: 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
+    s3:
+      bucket: profilehub-bucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+custom:
+  storage:
+    filePath: storage/files/
+    imagePath: images/
+    videoPath: videos/
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    #    url: jdbc:postgresql://docker.for.mac.host.internal:5432/profile_box
+    #    username: admin
+    #    password: admin
+    url: jdbc:postgresql://rds-profilehub2.c28euk17mhxq.ap-northeast-2.rds.amazonaws.com:5432/profilehub
+    username: cacao
+    password: cacaocacao
+#    url: jdbc:postgresql://rds-profilehub2.c28euk17mhxq.ap-northeast-2.rds.amazonaws.com:5432/dev
+#    username: dev
+#    password: 1234
+  data:
+    redis:
+      host: example-replication-group.eigq1z.ng.0001.apn2.cache.amazonaws.com
+      port: 6379
