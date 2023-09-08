@@ -30,11 +30,11 @@ public class MemberDTO {
                 .memberId(dto.getMemberId())
                 .memberType(MemberType.valueOf(dto.getMemberType()))
                 .memberEmail(dto.getMemberEmail())
-                .memberPassword(dto.getMemberPassword())
-                .memberName(dto.getMemberName())
-                .memberGender(GenderType.valueOf(dto.getMemberGender()))
-                .memberTelNo(dto.getMemberTelNo())
-                .memberBirthDt(Utils.stringToDate(dto.getMemberBirthDt()))
+//                .memberPassword(dto.getMemberPassword())
+//                .memberName(dto.getMemberName())
+//                .memberGender(GenderType.valueOf(dto.getMemberGender()))
+//                .memberTelNo(dto.getMemberTelNo())
+//                .memberBirthDt(Utils.stringToDate(dto.getMemberBirthDt()))
                 .build();
     }
 }

@@ -27,6 +27,7 @@ public enum ExceptionEnum {
     NOT_RESPONSE_ADMIN_API(HttpStatus.UNAUTHORIZED,  "ADMIN API 통신 오류입니다."),
     TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED,  "토큰이 존재하지 않습니다."),
     EXFIRED_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다."),
+    FAILED_OAUTH(HttpStatus.UNAUTHORIZED, "OAuth 인증에 실패했습니다."),
     MEMBER_ALREADY_EXIST(HttpStatus.INTERNAL_SERVER_ERROR, "이미 회원가입된 이메일입니다.");
 
     private final HttpStatus status;

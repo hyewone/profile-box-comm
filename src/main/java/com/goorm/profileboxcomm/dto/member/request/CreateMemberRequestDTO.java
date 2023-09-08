@@ -49,12 +49,12 @@ public class CreateMemberRequestDTO {
     public static Member toEntity(CreateMemberRequestDTO dto){
         return Member.builder()
                 .memberEmail(dto.getMemberEmail())
-                .memberPassword(dto.getMemberPassword())
-                .memberName(dto.getMemberName())
-                .memberGender(GenderType.valueOf(dto.getMemberGender()))
-                .memberType(MemberType.valueOf(dto.getMemberType()))
-                .memberTelNo(dto.getMemberTelNo().toString())
-                .memberBirthDt(Utils.stringToDate(dto.getMemberBirthDt()))
+//                .memberPassword(dto.getMemberPassword())
+//                .memberName(dto.getMemberName())
+//                .memberGender(GenderType.valueOf(dto.getMemberGender()))
+//                .memberType(MemberType.valueOf(dto.getMemberType()))
+//                .memberTelNo(dto.getMemberTelNo().toString())
+//                .memberBirthDt(Utils.stringToDate(dto.getMemberBirthDt()))
                 .build();
     }
 }

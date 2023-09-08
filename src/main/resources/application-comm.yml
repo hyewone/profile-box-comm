@@ -1,10 +1,10 @@
 cloud:
   aws:
     credentials:
-      accessKey: AKIAS7LKAHOQQDRS77W4
-      secretKey: 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
+      accessKey: AKIAZWTS4BFUNLLZYZFT
+      secretKey: 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
     s3:
-      bucket: profilehub-bucket
+      bucket: hyenee-bucket
     region:
       static: ap-northeast-2
     stack:
@@ -16,20 +16,11 @@ custom:
     videoPath: videos/
 ---
 spring:
-  config:
-    activate:
-      on-profile: prod
   datasource:
-    #    url: jdbc:postgresql://docker.for.mac.host.internal:5432/profile_box
-    #    username: admin
-    #    password: admin
     url: jdbc:postgresql://database.c0u6xj9tqa4x.ap-northeast-2.rds.amazonaws.com:5432/profilehub
     username: hyenee
     password: skfkrh12
-#    url: jdbc:postgresql://rds-profilehub2.c28euk17mhxq.ap-northeast-2.rds.amazonaws.com:5432/dev
-#    username: dev
-#    password: 1234
-  data:
-    redis:
-      host: example-replication-group.eigq1z.ng.0001.apn2.cache.amazonaws.com
-      port: 6379
+#  data:
+#    redis:
+#      host: example-replication-group.eigq1z.ng.0001.apn2.cache.amazonaws.com
+#      port: 6379
