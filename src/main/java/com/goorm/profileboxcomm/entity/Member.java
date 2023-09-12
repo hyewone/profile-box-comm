@@ -1,27 +1,20 @@
 package com.goorm.profileboxcomm.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.goorm.profileboxcomm.dto.member.MemberDTO;
-import com.goorm.profileboxcomm.dto.profile.request.CreateProfileRequestDto;
-import com.goorm.profileboxcomm.enumeration.GenderType;
 import com.goorm.profileboxcomm.enumeration.MemberType;
 import com.goorm.profileboxcomm.enumeration.ProviderType;
-import com.goorm.profileboxcomm.utils.Utils;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDateTime;
-import java.util.*;
 
-@Data
 @Entity
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -94,15 +87,6 @@ public class Member{
         modifyDt = LocalDateTime.now();
     }
 
-    // method
-    public static MemberDTO toDTO(Member entity){
-        return MemberDTO.builder()
-                .memberId(entity.getMemberId())
-                .memberType(entity.getMemberType().toString())
-                .memberEmail(entity.getMemberEmail())
-                .build();
-    }
-
 //    public List<String> getRoleList(){
 //        if(this.memberType.toString().length() > 0) return Arrays.asList(this.memberType.toString().split(","));
 //        return new ArrayList<>();
@@ -116,10 +100,10 @@ public class Member{
 //        return authorities;
 //    }
 
-    public static Member createMember(String memberType, String providerType, String memberEmail) {
+    public static Member createMember(MemberType memberType, ProviderType providerType, String memberEmail) {
         return Member.builder()
-                .memberType(MemberType.valueOf(memberType))
-                .providerType(ProviderType.valueOf(providerType))
+                .memberType(memberType)
+                .providerType(providerType)
                 .memberEmail(memberEmail)
                 .build();
     }

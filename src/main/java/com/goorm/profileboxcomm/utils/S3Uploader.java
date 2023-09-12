@@ -54,7 +54,12 @@ public class S3Uploader {
         return s3Url;
     }
 
+    private String generateS3DeleteFilePath(String filePath){
+        String prefix = String.format("https://%s.s3.%s.amazonaws.com/", bucketName, region);
+        return filePath.replace(prefix, "");
+    }
+
     public void deleteS3File(String filePath){
-        amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, filePath));
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, generateS3DeleteFilePath(filePath)));
     }
 }

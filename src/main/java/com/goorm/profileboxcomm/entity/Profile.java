@@ -1,24 +1,21 @@
 package com.goorm.profileboxcomm.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.goorm.profileboxcomm.dto.profile.ProfileDTO;
 import com.goorm.profileboxcomm.dto.profile.request.CreateProfileRequestDto;
-import com.goorm.profileboxcomm.utils.Utils;
-import com.querydsl.core.annotations.QueryEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @Entity
-@QueryEntity
+@Getter
+@Setter
+//@QueryEntity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -41,7 +38,6 @@ public class Profile {
     private String title;
 
     @Column(name = "default_image_id")
-//    @Positive
     private Long defaultImageId;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -91,17 +87,16 @@ public class Profile {
                 .build();
     }
 
-    public static ProfileDTO toDTO(Profile entity){
-        return ProfileDTO.builder()
-                .profileId(entity.getProfileId())
-                .content(entity.getContent())
-                .title(entity.getTitle())
-                .default_image_id(entity.getDefaultImageId())
-                .create_date(Utils.localDateToString(entity.getCreateDt()))
-                .modify_date(Utils.localDateToString(entity.getModifyDt()))
-                .member_id(entity.getMember().getMemberId())
-                .build();
+    public static List<String> getProfileFieldNames() {
+        List<String> fieldNames = new ArrayList<>();
+        Class<?> profileClass = Profile.class;
 
+        Field[] fields = profileClass.getDeclaredFields();
+        for (Field field : fields) {
+            fieldNames.add(field.getName());
+        }
+
+        return fieldNames;
     }
 }
 

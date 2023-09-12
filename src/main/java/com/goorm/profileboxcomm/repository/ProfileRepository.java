@@ -18,6 +18,10 @@ public interface ProfileRepository extends JpaRepository<Profile, Long>, CustomP
 
     Optional<Profile> findProfileByProfileId(@Param("profileId") Long profileId);
 
+    Optional<Profile> findProfileByDefaultImageId(@Param("defaultImageId") Long defaultImageId);
+
+    Optional<Profile> findProfileByProfileIdAndMember(@Param("profileId") Long profileId, @Param("member") Member member);
+
     boolean existsProfileByMember(@Param("member") Member member);
 
     void deleteByProfileId(@Param("profileId") Long profileId);

@@ -29,7 +29,7 @@ public class CreateProfileRequestDto {
 
     private int defaultImageIdx;
 
-    @NotNull(message = "프로필 작성 멤버ID를 확인해주세요.")
+//    @NotNull(message = "프로필 작성 멤버ID를 확인해주세요.")
     private Long memberId;
 
     private List<CreateImageRequestDto> images;

@@ -12,6 +12,10 @@ public enum ExceptionEnum {
     INVALID_REQUEST(HttpStatus.BAD_REQUEST, "유효하지 않는 요청입니다."),
     INVALID_DATE_FORMAT(HttpStatus.BAD_REQUEST, "데이트 포맷 파싱 에러입니다."),
     PROFILE_ALREADY_EXIST(HttpStatus.BAD_REQUEST,  "프로필이 이미 존재합니다."),
+
+    INVALID_MEMBERTYPE(HttpStatus.BAD_REQUEST,  "멤버 유형을 확인해주세요."),
+    INVALID_PROVIDERTYPE(HttpStatus.BAD_REQUEST,  "OAuth 공급자 유형을 확인해주세요."),
+
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "알 수 없는 에러가 발생했습니다."),
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "멤버가 존재하지 않습니다."),
     PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "프로필이 존재하지 않습니다."),

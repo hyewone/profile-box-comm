@@ -18,9 +18,6 @@ public class ApiResult<T>{
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
-//    @JsonInclude(JsonInclude.Include.NON_NULL)
-//    private ApiExceptionEntity exception;
-
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private int statusCode;
 

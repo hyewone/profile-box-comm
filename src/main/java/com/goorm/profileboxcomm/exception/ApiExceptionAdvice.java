@@ -73,4 +73,35 @@ public class ApiExceptionAdvice {
 //                        .exception(apiExceptionEntity)
                         .build());
     }
+
+//    @ExceptionHandler({ConstraintViolationException.class})
+//    public ResponseEntity handleValidationException(ConstraintViolationException ex) {
+//
+//        Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
+//        List<String> errors = new ArrayList<>();
+//        List<ExceptionEnum> enums = new ArrayList<>();
+//
+//        for (ConstraintViolation<?> violation : constraintViolations) {
+//            errors.add(violation.getMessage());
+//            errors.add(violation.());
+//        }
+//
+//        return ResponseEntity
+//                .status(violation.get)
+//                .body(ApiResult.builder()
+//                        .status(ApiResultType.ERROR.toString())
+//                        .statusCode(ExceptionEnum.INTERNAL_SERVER_ERROR.getStatus().value())
+//                        .message(apiExceptionEntity.getErrorMessage())
+////                        .exception(apiExceptionEntity)
+//                        .build());
+//    }
+//        return ResponseEntity
+//                .status(ExceptionEnum.INTERNAL_SERVER_ERROR.getStatus())
+//                .body(ApiResult.builder()
+//                        .status(ApiResultType.ERROR.toString())
+//                        .statusCode(ExceptionEnum.INTERNAL_SERVER_ERROR.getStatus().value())
+//                        .message(ex.getMessage())
+////                        .exception(apiExceptionEntity)
+//                        .build());
+//    }
 }
