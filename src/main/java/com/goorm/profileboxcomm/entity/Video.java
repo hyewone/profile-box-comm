@@ -4,14 +4,12 @@ import com.goorm.profileboxcomm.dto.video.request.CreateVideoRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @Entity
 @Builder
 @NoArgsConstructor

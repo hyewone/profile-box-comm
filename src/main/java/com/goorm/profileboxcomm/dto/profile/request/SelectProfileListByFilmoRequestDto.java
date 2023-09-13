@@ -1,16 +1,18 @@
 package com.goorm.profileboxcomm.dto.profile.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
 public class SelectProfileListByFilmoRequestDto {
     private int offset;
     private int limit;
-    private String sortKey;
     private String filmoType;
     private String filmoName;
-//    private String gender;
-//    private int age;
+    @Schema(description = "정렬 필드")
+    private String sortKey;
+    @Schema(description = "정렬 방향")
+    private String sortDirection;
 
     public SelectProfileListByFilmoRequestDto() {
         this.offset = 1;

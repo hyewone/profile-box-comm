@@ -5,14 +5,12 @@ import com.goorm.profileboxcomm.enumeration.FilmoType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @Entity
 @Builder
 @NoArgsConstructor
@@ -78,8 +76,4 @@ public class Filmo {
                 .profile(profile)
                 .build();
     }
-
-    // Getters and Setters
-
-    // Constructor
 }

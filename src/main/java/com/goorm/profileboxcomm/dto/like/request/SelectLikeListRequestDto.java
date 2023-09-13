@@ -1,6 +1,7 @@
-package com.goorm.profileboxcomm.dto.profile.request;
+package com.goorm.profileboxcomm.dto.like.request;
 
-import com.goorm.profileboxcomm.entity.Profile;
+import com.goorm.profileboxcomm.entity.Like;
+import com.goorm.profileboxcomm.enumeration.LikeType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.data.domain.Sort;
@@ -9,17 +10,11 @@ import java.util.Arrays;
 import java.util.List;
 
 @Data
-@Schema(description = "프로필 리스트 조회 파라미터")
-public class SelectProfileListRequestDto {
+public class SelectLikeListRequestDto {
 
-    @Schema(description = "필모 유형")
-    private String filmoType;
-    @Schema(description = "필모 이름")
-    private String filmoName;
-    @Schema(description = "프로필 제목")
-    private String title;
-    @Schema(description = "배우 이름")
-    private String actorName;
+    @Schema(description = "좋아요 타입")
+//    @EnumPattern(regexp = "PROFILE|NOTICE", message = "좋아요 유형을 확인해주세요.", enumType= ExceptionEnum.INVALID_LIKE_TARGETTYPE)
+    private String likeType;
     @Schema(description = "검색 페이지")
     private int offset;
     @Schema(description = "한 페이지당 검색 데이터")
@@ -29,15 +24,22 @@ public class SelectProfileListRequestDto {
     @Schema(description = "정렬 방향")
     private String sortDirection;
 
-    public SelectProfileListRequestDto() {
+    public SelectLikeListRequestDto() {
+        this.likeType = "";
         this.offset = 0;
         this.limit = 10;
-        this.sortKey = "profileId";
+        this.sortKey = "createDt";
         this.sortDirection = Sort.Direction.DESC.toString();
-        this.filmoType = "";
-        this.filmoName = "";
-        this.title = "";
-        this.actorName = "";
+    }
+
+    public void setLikeType(String likeType){
+        if (likeType == null || likeType.trim().isEmpty()){
+            this.likeType = "";
+        }else{
+            if(LikeType.valueOf(likeType) != null){
+                this.likeType = "";
+            }
+        }
     }
 
     public void setOffset(int offset) {
@@ -58,14 +60,14 @@ public class SelectProfileListRequestDto {
 
     public void setSortKey(String sortKey){
         if (sortKey == null || sortKey.trim().isEmpty() || !isValidSortKey(sortKey)) {
-            this.sortKey = "profileId";
+            this.sortKey = "createDt";
         } else {
             this.sortKey = sortKey;
         }
     }
 
     private boolean isValidSortKey(String sortKey) {
-        List<String> validSortKeys = Profile.getProfileFieldNames();
+        List<String> validSortKeys = Like.getLikeFieldNames();
         return validSortKeys.contains(sortKey);
     }
 

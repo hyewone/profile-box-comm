@@ -8,7 +8,8 @@ import java.lang.annotation.*;
 
 @Documented
 @Constraint(validatedBy = EnumPatternValidator.class)
-@Target({ElementType.FIELD})
+
+@Target({ElementType.TYPE_USE, ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EnumPattern {
     String regexp();

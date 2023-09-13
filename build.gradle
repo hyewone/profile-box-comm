@@ -4,7 +4,7 @@ plugins {
 	id 'war'
 	id 'org.springframework.boot' version '3.0.7'
 	id 'io.spring.dependency-management' version '1.1.0'
-//	id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
+	id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
 }
 
 group = 'com.goorm'
@@ -44,6 +44,7 @@ dependencies {
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
+
 //	testImplementation 'junit:junit:4.13.1'
     compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -59,25 +60,18 @@ tasks.named('test') {
 }
 
 // Querydsl 설정부
-def generatedDir = 'src/main/generated'
+def querydslDir = "$buildDir/generated/querydsl"
 
-clean {
-	delete file (generatedDir)
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
 }
-
-//querydsl {
-//	jpa = true
-//	querydslSourcesDir = generated
-//}
-//sourceSets {
-//	main.java.srcDir generated
-//}
-//compileQuerydsl{
-//	options.annotationProcessorPath = configurations.querydsl
-//}
-//configurations {
-//	compileOnly {
-//		extendsFrom annotationProcessor
-//	}
-//	querydsl.extendsFrom compileClasspath
-//}
+sourceSets {
+	main.java.srcDir querydslDir
+}
+configurations {
+	querydsl.extendsFrom compileClasspath
+}
+compileQuerydsl{
+	options.annotationProcessorPath = configurations.querydsl
+}

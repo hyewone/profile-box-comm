@@ -2,6 +2,7 @@ package com.goorm.profileboxcomm.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.goorm.profileboxcomm.dto.profile.request.CreateProfileRequestDto;
+import com.goorm.profileboxcomm.enumeration.YnType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,6 +28,11 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long profileId;
 
+    @Column(name = "actor_name")
+    @NotNull
+    @NotBlank
+    private String actorName;
+
     @Column(name = "content")
     @NotNull
     @NotBlank
@@ -39,6 +45,11 @@ public class Profile {
 
     @Column(name = "default_image_id")
     private Long defaultImageId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "yn_type")
+    @NotNull
+    private YnType ynType; // Y, N
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_dt")
@@ -53,7 +64,6 @@ public class Profile {
     @JsonManagedReference
     private Member member;
 
-//    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "imageId")
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "profile", orphanRemoval = true)
     private List<Image> imageEntities;
 
@@ -81,8 +91,10 @@ public class Profile {
     // method
     public static Profile createProfile(CreateProfileRequestDto profileDto, Member member) {
         return Profile.builder()
+                .actorName(profileDto.getActorName())
                 .title(profileDto.getTitle())
                 .content(profileDto.getContent())
+                .ynType(profileDto.getYnType())
                 .member(member)
                 .build();
     }
