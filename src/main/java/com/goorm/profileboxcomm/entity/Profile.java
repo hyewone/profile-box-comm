@@ -89,12 +89,12 @@ public class Profile {
     }
 
     // method
-    public static Profile createProfile(CreateProfileRequestDto profileDto, Member member) {
+    public static Profile createProfile(CreateProfileRequestDto dto, Member member) {
         return Profile.builder()
-                .actorName(profileDto.getActorName())
-                .title(profileDto.getTitle())
-                .content(profileDto.getContent())
-                .ynType(profileDto.getYnType())
+                .actorName(dto.getActorName())
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .ynType(dto.getYnType())
                 .member(member)
                 .build();
     }

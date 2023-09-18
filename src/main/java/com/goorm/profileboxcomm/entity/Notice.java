@@ -1,19 +1,23 @@
 package com.goorm.profileboxcomm.entity;
 
+import com.goorm.profileboxcomm.dto.notice.request.CreateNoticeRequestDto;
 import com.goorm.profileboxcomm.enumeration.FilmoType;
-import com.goorm.profileboxcomm.dto.notice.NoticeDTO;
 import com.goorm.profileboxcomm.utils.Utils;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.lang.reflect.Field;
+import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+@Entity
 @Getter
 @Setter
-@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -88,22 +92,41 @@ public class Notice {
         modifyDt = LocalDateTime.now();
     }
 
-    // method
-    public static NoticeDTO toDTO(Notice entity){
-        return NoticeDTO.builder()
-                .noticeId(entity.getNoticeId())
-                .title(entity.getNoticeTitle())
-                .content(entity.getNoticeContent())
-                .filmo_type(entity.getFilmoType().toString())
-                .filmo_name(entity.getFilmoName())
-                .filmo_role(entity.getFilmoRole())
-                .apply_deadline_dt(Utils.dateToString(entity.getApplyDeadlineDt()))
-                .filming_start_period(Utils.dateToString(entity.getFilmingStartPeriod()))
-                .filming_end_period(Utils.dateToString(entity.getFilmingEndPeriod()))
-                .create_dt(Utils.localDateToString(entity.getCreateDt()))
-                .modify_dt(Utils.localDateToString(entity.getModifyDt()))
-                .member_id(entity.getMember().getMemberId())
+    public static Notice createNotice(CreateNoticeRequestDto dto, Member member) throws ParseException {
+        return Notice.builder()
+                .noticeTitle(dto.getNoticeTitle())
+                .noticeContent(dto.getNoticeContent())
+                .filmoType(dto.getFilmoType())
+                .filmoName(dto.getFilmoName())
+                .filmoRole(dto.getFilmoRole())
+                .applyDeadlineDt(Utils.stringToDate(dto.getApplyDeadlineDt()))
+                .filmingStartPeriod(Utils.stringToDate(dto.getFilmingStartPeriod()))
+                .filmingEndPeriod(Utils.stringToDate(dto.getFilmingEndPeriod()))
+                .member(member)
                 .build();
     }
 
+    public static Notice updateNotice(Notice notice, CreateNoticeRequestDto dto) {
+        notice.setNoticeTitle(dto.getNoticeTitle());
+        notice.setNoticeContent(dto.getNoticeContent());
+        notice.setFilmoType(dto.getFilmoType());
+        notice.setFilmoName(dto.getFilmoName());
+        notice.setFilmoRole(dto.getFilmoRole());
+        notice.setApplyDeadlineDt(Utils.stringToDate(dto.getApplyDeadlineDt()));
+        notice.setFilmingStartPeriod(Utils.stringToDate(dto.getFilmingStartPeriod()));
+        notice.setFilmingEndPeriod(Utils.stringToDate(dto.getFilmingEndPeriod()));
+        return notice;
+    }
+
+    public static List<String> getNoticeFieldNames() {
+        List<String> fieldNames = new ArrayList<>();
+        Class<?> profileClass = Notice.class;
+
+        Field[] fields = profileClass.getDeclaredFields();
+        for (Field field : fields) {
+            fieldNames.add(field.getName());
+        }
+
+        return fieldNames;
+    }
 }

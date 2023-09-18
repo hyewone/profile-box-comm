@@ -1,11 +1,13 @@
 package com.goorm.profileboxcomm.dto.profile.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.goorm.profileboxcomm.dto.filmo.response.SelectFilmoResponseDto;
 import com.goorm.profileboxcomm.dto.image.response.SelectImageResponseDto;
 import com.goorm.profileboxcomm.dto.link.response.SelectLinkResponseDto;
 import com.goorm.profileboxcomm.dto.member.response.SelectMemberResponseDto;
 import com.goorm.profileboxcomm.dto.video.response.SelectVideoResponseDto;
 import com.goorm.profileboxcomm.entity.Profile;
+import com.goorm.profileboxcomm.utils.Utils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -14,6 +16,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
     public class SelectProfileResponseDto {
 
         @Schema(description = "프로필 ID")
@@ -52,26 +55,42 @@ import static java.util.stream.Collectors.toList;
         @Schema(description = "링크 목록")
         private List<SelectLinkResponseDto> links;
 
-        public SelectProfileResponseDto(Profile profile) {
-            this.profileId = profile.getProfileId();
-            this.content = profile.getContent();
-            this.actorName = profile.getActorName();
-            this.title = profile.getTitle();
-            this.defaultImageId = profile.getDefaultImageId();
-            this.ynType = profile.getYnType().toString();
-            this.createDt = profile.getCreateDt().toString();
-            this.memberInfo = new SelectMemberResponseDto(profile.getMember());
-            this.images = profile.getImageEntities().stream()
+        public static SelectProfileResponseDto getDtoForDetail(Profile profile){
+            SelectProfileResponseDto dto = new SelectProfileResponseDto();
+            dto.setProfileId(profile.getProfileId());
+            dto.setContent(profile.getContent());
+            dto.setActorName(profile.getActorName());
+            dto.setTitle(profile.getTitle());
+            dto.setDefaultImageId(profile.getDefaultImageId());
+            dto.setYnType(profile.getYnType().toString());
+            dto.setCreateDt(Utils.localDateToString(profile.getCreateDt()));
+            dto.setImages(profile.getImageEntities().stream()
                     .map(o -> new SelectImageResponseDto(o))
-                    .collect(toList());
-            this.videos = profile.getVideoEntities().stream()
+                    .collect(toList()));
+            dto.setVideos(profile.getVideoEntities().stream()
                     .map(o -> new SelectVideoResponseDto(o))
-                    .collect(toList());
-            this.filmos = profile.getFilmoEntities().stream()
+                    .collect(toList()));
+            dto.setFilmos(profile.getFilmoEntities().stream()
                     .map(o -> new SelectFilmoResponseDto(o))
-                    .collect(toList());
-            this.links = profile.getLinkEntities().stream()
+                    .collect(toList()));
+            dto.setLinks(profile.getLinkEntities().stream()
                     .map(o -> new SelectLinkResponseDto(o))
-                    .collect(toList());
+                    .collect(toList()));
+            return dto;
+        }
+
+        public static SelectProfileResponseDto getDtoForList(Profile profile){
+            SelectProfileResponseDto dto = new SelectProfileResponseDto();
+            dto.setProfileId(profile.getProfileId());
+            dto.setContent(profile.getContent());
+            dto.setActorName(profile.getActorName());
+            dto.setTitle(profile.getTitle());
+            dto.setDefaultImageId(profile.getDefaultImageId());
+            dto.setYnType(profile.getYnType().toString());
+            dto.setCreateDt(Utils.localDateToString(profile.getCreateDt()));
+            dto.setImages(profile.getImageEntities().stream()
+                    .map(o -> new SelectImageResponseDto(o))
+                    .collect(toList()));
+            return dto;
         }
     }

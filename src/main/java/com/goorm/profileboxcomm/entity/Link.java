@@ -21,10 +21,10 @@ public class Link {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long linkId;
 
-    @Column(name = "link")
+    @Column(name = "link_url")
     @NotNull
     @NotBlank
-    private String link;
+    private String linkUrl;
 
     @Column(name = "link_name")
     @NotNull
@@ -49,7 +49,7 @@ public class Link {
     // method
     public static Link createLink(CreateLinkRequestDto linkDto, Profile profile) {
         return Link.builder()
-                .link(linkDto.getLink())
+                .linkUrl(linkDto.getLink())
                 .linkName(linkDto.getLinkName())
                 .profile(profile)
                 .build();

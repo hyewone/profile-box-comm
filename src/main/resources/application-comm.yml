@@ -15,11 +15,27 @@ custom:
     imagePath: images/
     videoPath: videos/
 ---
+
 spring:
   datasource:
     url: jdbc:postgresql://database.c0u6xj9tqa4x.ap-northeast-2.rds.amazonaws.com:5432/profilehub
     username: hyenee
     password: skfkrh12
+  #      port: 27017
+#      authentication-database: admin
+#      database: my-database
+#      username: Cluster81439
+#      password: dlBqb2ZUd09j
+
+#Cluster Name:				Cluster81439
+#Cloud Provider and Region:		AWS - US_EAST_1
+#Database User Username:			Cluster81439
+#Load sample data:			Yes
+#Allow connections from (IP Address):	14.39.196.172
+
+#Database User Username: Cluster81439
+#Database User Password: dlBqb2ZUd09j
+
 #  data:
 #    redis:
 #      host: example-replication-group.eigq1z.ng.0001.apn2.cache.amazonaws.com

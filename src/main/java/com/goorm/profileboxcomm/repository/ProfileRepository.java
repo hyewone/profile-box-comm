@@ -17,6 +17,8 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 //    Page<Profile> findAll(@Param("pageable") Pageable pageable);
     Optional<Profile> findProfileByProfileId(@Param("profileId") Long profileId);
 
+    Optional<Profile> findProfileByMember(@Param("member") Member member);
+
     Optional<Profile> findProfileByDefaultImageId(@Param("defaultImageId") Long defaultImageId);
 
     Optional<Profile> findProfileByProfileIdAndMember(@Param("profileId") Long profileId, @Param("member") Member member);

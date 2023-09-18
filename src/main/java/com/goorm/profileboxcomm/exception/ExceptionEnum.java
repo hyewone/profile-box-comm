@@ -13,6 +13,7 @@ public enum ExceptionEnum {
     INVALID_DATE_FORMAT(HttpStatus.BAD_REQUEST, "데이트 포맷 파싱 에러입니다."),
     PROFILE_ALREADY_EXIST(HttpStatus.BAD_REQUEST,  "프로필이 이미 존재합니다."),
 
+    INVALID_FILMOTYPE(HttpStatus.BAD_REQUEST,  "필모 유형을 확인해주세요."),
     INVALID_MEMBERTYPE(HttpStatus.BAD_REQUEST,  "멤버 유형을 확인해주세요."),
     INVALID_PROVIDERTYPE(HttpStatus.BAD_REQUEST,  "OAuth 공급자 유형을 확인해주세요."),
     INVALID_LIKE_TARGETTYPE(HttpStatus.BAD_REQUEST,  "좋아요 유형을 확인해주세요."),
@@ -27,6 +28,9 @@ public enum ExceptionEnum {
     FILMO_NOT_FOUND(HttpStatus.NOT_FOUND,  "필모그래피가 존재하지 않습니다."),
     LINK_NOT_FOUND(HttpStatus.NOT_FOUND, "링크가 존재하지 않습니다."),
     LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "좋아요가 존재하지 않습니다."),
+    AVAILABLE_PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "지원 가능한 프로필이 존재하지 않습니다."),
+
+    APPLY_ALREADY_EXIST(HttpStatus.INTERNAL_SERVER_ERROR, "이미 지원한 공고입니다."),
 
     SECURITY(HttpStatus.UNAUTHORIZED,  "로그인이 필요합니다."),
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "멤버가 존재하지 않거나 패스워드가 일치하지 않습니다."),

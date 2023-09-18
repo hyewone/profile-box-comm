@@ -12,7 +12,7 @@ public class SelectLinkResponseDto {
 
     public SelectLinkResponseDto(Link link) {
         this.linkId = link.getLinkId();
-        this.link = link.getLink();
+        this.link = link.getLinkUrl();
         this.linkName = link.getLinkName();
         this.createDt = link.getCreateDt().toString();
     }

@@ -1,9 +1,7 @@
 package com.goorm.profileboxcomm.repository.customRepositoryImple;
 
 import com.goorm.profileboxcomm.dto.profile.request.SelectProfileListRequestDto;
-import com.goorm.profileboxcomm.entity.Profile;
-import com.goorm.profileboxcomm.entity.QFilmo;
-import com.goorm.profileboxcomm.entity.QProfile;
+import com.goorm.profileboxcomm.entity.*;
 import com.goorm.profileboxcomm.enumeration.FilmoType;
 import com.goorm.profileboxcomm.enumeration.YnType;
 import com.goorm.profileboxcomm.repository.customRepository.CustomProfileRepository;
@@ -21,15 +19,15 @@ import org.springframework.stereotype.Repository;
 public class CustomProfileRepositoryImple implements CustomProfileRepository {
     private final JPAQueryFactory queryFactory;
     private final QProfile qProfile = QProfile.profile;
-
-//    @Override
-//    public Page<Profile> findProfiles(Pageable pageable, SelectProfileListRequestDto dto) {
-//        return null;
-//    }
+    private final QImage qImage = QImage.image;
+    private final QVideo qVideo = QVideo.video;
+    private final QFilmo qFilmo = QFilmo.filmo;
+    private final QLink qLink = QLink.link;
 
     //    @Override
     public Page<Profile> findProfiles(@Param("pageable") Pageable pageable, @Param("dto") SelectProfileListRequestDto dto) {
         JPAQuery<Profile> query = queryFactory.selectFrom(qProfile)
+                .leftJoin(qProfile.imageEntities, qImage).fetchJoin()
                 .where(qProfile.ynType.eq(YnType.Y))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
@@ -43,9 +41,7 @@ public class CustomProfileRepositoryImple implements CustomProfileRepository {
         }
 
         if (!dto.getFilmoType().isEmpty() || !dto.getFilmoName().isEmpty()){
-            QFilmo qFilmo = QFilmo.filmo;
             query.innerJoin(qProfile.filmoEntities, qFilmo);
-
             if (!dto.getFilmoType().isEmpty()){
                 query.where(qFilmo.filmoType.eq(FilmoType.valueOf(dto.getFilmoType())));
             }
@@ -55,4 +51,11 @@ public class CustomProfileRepositoryImple implements CustomProfileRepository {
         }
         return new PageImpl<>(query.fetch(), pageable, query.fetchCount());
     }
+
+
+//	.leftJoin(user.articleList, article)
+//	.fetchJoin()
+//	.leftJoin(user.team, team)
+//	.fetchJoin()
+//	.distinct()
 }

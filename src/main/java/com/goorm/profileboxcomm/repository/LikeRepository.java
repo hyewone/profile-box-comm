@@ -1,6 +1,8 @@
 package com.goorm.profileboxcomm.repository;
 
 import com.goorm.profileboxcomm.entity.Like;
+import com.goorm.profileboxcomm.entity.Member;
+import com.goorm.profileboxcomm.enumeration.LikeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,7 +20,9 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
 
     void deleteByLikeId(@Param("likeId") Long likeId);
 
-//
+    Optional<Like> getLikeBylikeTypeAndTargetIdAndMember(@Param("likeType") LikeType likeType, @Param("targetId") Long targetId, @Param("member")Member member);
+
+    //
 //    Optional<Profile> findProfileByProfileId(@Param("profileId") Long profileId);
 //
 //    Optional<Profile> findProfileByDefaultImageId(@Param("defaultImageId") Long defaultImageId);

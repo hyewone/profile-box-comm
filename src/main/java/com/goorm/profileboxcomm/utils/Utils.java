@@ -2,6 +2,8 @@ package com.goorm.profileboxcomm.utils;
 
 import com.goorm.profileboxcomm.exception.ApiException;
 import com.goorm.profileboxcomm.exception.ExceptionEnum;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -31,7 +33,8 @@ public class Utils {
     }
 
     public static String localDateToString(LocalDateTime date){
-        return date.toString();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return date.format(formatter);
     }
 
     public static LocalDateTime stringToLocalDateTime(String date){
@@ -47,5 +50,25 @@ public class Utils {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
         return LocalDateTime.parse(date, formatter);
+    }
+
+    public static Sort.Direction getSrotDirection(String strDirection){
+        Sort.Direction sortDirection = null;
+        switch (strDirection) {
+            case "ASC":
+                sortDirection = Sort.Direction.ASC;
+                break;
+            case "DESC":
+                sortDirection = Sort.Direction.DESC;
+                break;
+            default:
+                sortDirection = Sort.Direction.DESC;
+                break;
+        }
+        return sortDirection;
+    }
+
+    public static boolean isAdmin(Authentication authentication){
+        return authentication.getAuthorities().stream().anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
     }
 }

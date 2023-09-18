@@ -1,6 +1,6 @@
-package com.goorm.profileboxcomm.dto.profile.request;
+package com.goorm.profileboxcomm.dto.apply.request;
 
-import com.goorm.profileboxcomm.entity.Profile;
+import com.goorm.profileboxcomm.entity.Like;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.data.domain.Sort;
@@ -9,17 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @Data
-@Schema(description = "프로필 리스트 조회 요청 DTO")
-public class SelectProfileListRequestDto {
+public class SelectApplyListRequestDto {
 
-    @Schema(description = "필모 유형")
-    private String filmoType;
-    @Schema(description = "필모 이름")
-    private String filmoName;
-    @Schema(description = "프로필 제목")
-    private String title;
-    @Schema(description = "배우 이름")
-    private String actorName;
     @Schema(description = "검색 페이지")
     private int offset;
     @Schema(description = "한 페이지당 검색 데이터")
@@ -29,16 +20,22 @@ public class SelectProfileListRequestDto {
     @Schema(description = "정렬 방향")
     private String sortDirection;
 
-    public SelectProfileListRequestDto() {
+    public SelectApplyListRequestDto() {
         this.offset = 0;
         this.limit = 10;
-        this.sortKey = "profileId";
+        this.sortKey = "createDt";
         this.sortDirection = Sort.Direction.DESC.toString();
-        this.filmoType = "";
-        this.filmoName = "";
-        this.title = "";
-        this.actorName = "";
     }
+
+//    public void setLikeType(String likeType){
+//        if (likeType == null || likeType.trim().isEmpty()){
+//            this.likeType = "";
+//        }else{
+//            if(LikeType.valueOf(likeType) != null){
+//                this.likeType = "";
+//            }
+//        }
+//    }
 
     public void setOffset(int offset) {
         if (offset < 1) {
@@ -58,14 +55,14 @@ public class SelectProfileListRequestDto {
 
     public void setSortKey(String sortKey){
         if (sortKey == null || sortKey.trim().isEmpty() || !isValidSortKey(sortKey)) {
-            this.sortKey = "profileId";
+            this.sortKey = "createDt";
         } else {
             this.sortKey = sortKey;
         }
     }
 
     private boolean isValidSortKey(String sortKey) {
-        List<String> validSortKeys = Profile.getProfileFieldNames();
+        List<String> validSortKeys = Like.getLikeFieldNames();
         return validSortKeys.contains(sortKey);
     }
 
