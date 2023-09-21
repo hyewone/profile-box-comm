@@ -55,6 +55,9 @@ import static java.util.stream.Collectors.toList;
         @Schema(description = "링크 목록")
         private List<SelectLinkResponseDto> links;
 
+        @Schema(description = "좋아요 개수")
+        private Long likeCount;
+
         public static SelectProfileResponseDto getDtoForDetail(Profile profile){
             SelectProfileResponseDto dto = new SelectProfileResponseDto();
             dto.setProfileId(profile.getProfileId());
@@ -64,6 +67,7 @@ import static java.util.stream.Collectors.toList;
             dto.setDefaultImageId(profile.getDefaultImageId());
             dto.setYnType(profile.getYnType().toString());
             dto.setCreateDt(Utils.localDateToString(profile.getCreateDt()));
+            dto.setMemberInfo(new SelectMemberResponseDto(profile.getMember()));
             dto.setImages(profile.getImageEntities().stream()
                     .map(o -> new SelectImageResponseDto(o))
                     .collect(toList()));
@@ -91,6 +95,19 @@ import static java.util.stream.Collectors.toList;
             dto.setImages(profile.getImageEntities().stream()
                     .map(o -> new SelectImageResponseDto(o))
                     .collect(toList()));
+            dto.setLikeCount(profile.getLikeCount());
+            return dto;
+        }
+
+        public static SelectProfileResponseDto getDtoForUserInfo(Profile profile){
+            SelectProfileResponseDto dto = new SelectProfileResponseDto();
+            dto.setProfileId(profile.getProfileId());
+            dto.setContent(profile.getContent());
+            dto.setActorName(profile.getActorName());
+            dto.setTitle(profile.getTitle());
+            dto.setDefaultImageId(profile.getDefaultImageId());
+            dto.setYnType(profile.getYnType().toString());
+            dto.setCreateDt(Utils.localDateToString(profile.getCreateDt()));
             return dto;
         }
     }

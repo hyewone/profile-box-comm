@@ -13,8 +13,7 @@ import java.util.List;
 public class SelectLikeListRequestDto {
 
     @Schema(description = "좋아요 타입")
-//    @EnumPattern(regexp = "PROFILE|NOTICE", message = "좋아요 유형을 확인해주세요.", enumType= ExceptionEnum.INVALID_LIKE_TARGETTYPE)
-    private String likeType;
+   private String likeType;
     @Schema(description = "검색 페이지")
     private int offset;
     @Schema(description = "한 페이지당 검색 데이터")

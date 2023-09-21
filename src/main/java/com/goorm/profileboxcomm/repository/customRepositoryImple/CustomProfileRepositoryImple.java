@@ -5,7 +5,10 @@ import com.goorm.profileboxcomm.entity.*;
 import com.goorm.profileboxcomm.enumeration.FilmoType;
 import com.goorm.profileboxcomm.enumeration.YnType;
 import com.goorm.profileboxcomm.repository.customRepository.CustomProfileRepository;
-import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.lettuce.core.dynamic.annotation.Param;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,39 +29,66 @@ public class CustomProfileRepositoryImple implements CustomProfileRepository {
     private final QVideo qVideo = QVideo.video;
     private final QFilmo qFilmo = QFilmo.filmo;
     private final QLink qLink = QLink.link;
+    private final QLike qLike = QLike.like;
 
-    //    @Override
+    @Override
     public Page<Profile> findProfiles(@Param("pageable") Pageable pageable, @Param("dto") SelectProfileListRequestDto dto) {
-        JPAQuery<Profile> query = queryFactory.selectFrom(qProfile)
-                .leftJoin(qProfile.imageEntities, qImage).fetchJoin()
-                .where(qProfile.ynType.eq(YnType.Y))
+
+        List<Tuple> tupleProfiles = queryFactory
+                .select(
+                        qProfile,
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(qLike.count())
+                                        .from(qLike)
+                                        .where(qLike.targetId.eq(qProfile.profileId)),
+                                "likeCount"
+                        )
+                )
+                .from(qProfile)
+                .where(qProfile.ynType.eq(YnType.Y),
+                        titleCon(dto.getTitle()),
+                        actorNameCon(dto.getActorName()),
+                        filmoJoin(dto.getFilmoType(), dto.getFilmoName()),
+                        filmoTypeEq(dto.getFilmoType()),
+                        filmoNameCon(dto.getFilmoName())
+                )
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
+                .limit(pageable.getPageSize())
+                .fetch();
 
-        if (!dto.getTitle().isEmpty()){
-            query.where(qProfile.title.contains(dto.getTitle()));
-        }
+        List<Profile> profiles = tupleProfiles.stream()
+                .map(tuple -> {
+                    Profile profile = tuple.get(0, Profile.class);
+                    Long likeCount = tuple.get(1, Long.class);
+                    profile.setLikeCount(likeCount);
+                    return profile;
+                })
+                .collect(Collectors.toList());
 
-        if (!dto.getActorName().isEmpty()){
-            query.where(qProfile.actorName.contains(dto.getActorName()));
-        }
-
-        if (!dto.getFilmoType().isEmpty() || !dto.getFilmoName().isEmpty()){
-            query.innerJoin(qProfile.filmoEntities, qFilmo);
-            if (!dto.getFilmoType().isEmpty()){
-                query.where(qFilmo.filmoType.eq(FilmoType.valueOf(dto.getFilmoType())));
-            }
-            if (!dto.getFilmoName().isEmpty()){
-                query.where(qFilmo.filmoName.contains(dto.getFilmoName()));
-            }
-        }
-        return new PageImpl<>(query.fetch(), pageable, query.fetchCount());
+        return new PageImpl<>(profiles, pageable, profiles.size());
     }
 
+    private BooleanExpression titleCon(String title) {
+        return hasText(title) ? qProfile.title.contains(title) : null;
+    }
 
-//	.leftJoin(user.articleList, article)
-//	.fetchJoin()
-//	.leftJoin(user.team, team)
-//	.fetchJoin()
-//	.distinct()
+    private BooleanExpression actorNameCon(String actorName) {
+        return hasText(actorName) ? qProfile.actorName.contains(actorName) : null;
+    }
+
+    private BooleanExpression filmoTypeEq(String filmoType) {
+        return hasText(filmoType) ? qFilmo.filmoType.eq(FilmoType.valueOf(filmoType)) : null;
+    }
+
+    private BooleanExpression filmoNameCon(String filmoName) {
+        return hasText(filmoName) ? qFilmo.filmoName.contains(filmoName) : null;
+    }
+    private BooleanExpression filmoJoin(String filmoType, String filmoName) {
+        return hasText(filmoType) || hasText(filmoName) ? qProfile.filmoEntities.any().eq(qFilmo) : null;
+    }
+
+    private boolean hasText(String text){
+        return !text.isEmpty();
+    }
 }

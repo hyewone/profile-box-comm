@@ -46,7 +46,7 @@ public class SelectNoticeListRequsetDto {
 
     public void setSortKey(String sortKey){
         if (sortKey == null || sortKey.trim().isEmpty() || !isValidSortKey(sortKey)) {
-            this.sortKey = "profileId";
+            this.sortKey = "noticeId";
         } else {
             this.sortKey = sortKey;
         }

@@ -1,6 +1,5 @@
 package com.goorm.profileboxcomm.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.goorm.profileboxcomm.dto.profile.request.CreateProfileRequestDto;
 import com.goorm.profileboxcomm.enumeration.YnType;
 import jakarta.persistence.*;
@@ -61,7 +60,6 @@ public class Profile {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    @JsonManagedReference
     private Member member;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "profile", orphanRemoval = true)
@@ -75,6 +73,9 @@ public class Profile {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "profile", orphanRemoval = true)
     private List<Link> linkEntities;
+
+    @Transient
+    private Long likeCount;
 
     @PrePersist
     protected void onCreate() {

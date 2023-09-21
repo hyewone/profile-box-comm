@@ -14,7 +14,6 @@ import java.util.Optional;
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
     @Override
     Page<Profile> findAll(@Param("pageable") Pageable pageable);
-//    Page<Profile> findAll(@Param("pageable") Pageable pageable);
     Optional<Profile> findProfileByProfileId(@Param("profileId") Long profileId);
 
     Optional<Profile> findProfileByMember(@Param("member") Member member);

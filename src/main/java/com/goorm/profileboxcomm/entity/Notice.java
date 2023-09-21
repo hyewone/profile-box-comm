@@ -39,7 +39,7 @@ public class Notice {
     @NotBlank
     private String noticeContent;
 
-    @Column(name = "filmo_type")
+    @Enumerated(EnumType.STRING)
     @NotNull
     private FilmoType filmoType;
 
@@ -79,6 +79,9 @@ public class Notice {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Transient
+    private Long likeCount;
 
     @PrePersist
     protected void onCreate() {

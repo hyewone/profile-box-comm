@@ -1,6 +1,5 @@
 package com.goorm.profileboxcomm.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.goorm.profileboxcomm.enumeration.MemberType;
 import com.goorm.profileboxcomm.enumeration.ProviderType;
 import jakarta.persistence.*;
@@ -68,9 +67,8 @@ public class Member{
     private LocalDateTime modifyDt;
 
     // v1
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    @JsonBackReference
     private Profile profile;
 
     @PrePersist
