@@ -7,16 +7,22 @@ import com.goorm.profileboxcomm.enumeration.YnType;
 import com.goorm.profileboxcomm.repository.customRepository.CustomProfileRepository;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.lettuce.core.dynamic.annotation.Param;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,7 +40,7 @@ public class CustomProfileRepositoryImple implements CustomProfileRepository {
     @Override
     public Page<Profile> findProfiles(@Param("pageable") Pageable pageable, @Param("dto") SelectProfileListRequestDto dto) {
 
-        List<Tuple> tupleProfiles = queryFactory
+        JPAQuery<Tuple> query = queryFactory
                 .select(
                         qProfile,
                         ExpressionUtils.as(
@@ -48,11 +54,25 @@ public class CustomProfileRepositoryImple implements CustomProfileRepository {
                 .from(qProfile)
                 .where(qProfile.ynType.eq(YnType.Y),
                         titleCon(dto.getTitle()),
-                        actorNameCon(dto.getActorName()),
-                        filmoJoin(dto.getFilmoType(), dto.getFilmoName()),
-                        filmoTypeEq(dto.getFilmoType()),
-                        filmoNameCon(dto.getFilmoName())
-                )
+                        actorNameCon(dto.getActorName())
+                );
+
+        if(hasText(dto.getFilmoType()) || hasText(dto.getFilmoName())){
+            query.innerJoin(qProfile.filmoEntities, qFilmo)
+                    .where(filmoTypeEq(dto.getFilmoType()),
+                            filmoNameCon(dto.getFilmoName()));
+        }
+
+        for (Sort.Order o : pageable.getSort()){
+            PathBuilder pathBuilder = new PathBuilder(qProfile.getType(), qProfile.getMetadata());
+            if (o.getProperty().equals("likeCount")) {
+                query.orderBy(new OrderSpecifier(o.isAscending() ? Order.ASC : Order.DESC, pathBuilder.get("likeCount")));
+            } else {
+                query.orderBy(new OrderSpecifier(o.isAscending() ? Order.ASC : Order.DESC, pathBuilder.get(o.getProperty())));
+            }
+        }
+
+        List<Tuple> tupleProfiles = query
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -60,13 +80,13 @@ public class CustomProfileRepositoryImple implements CustomProfileRepository {
         List<Profile> profiles = tupleProfiles.stream()
                 .map(tuple -> {
                     Profile profile = tuple.get(0, Profile.class);
-                    Long likeCount = tuple.get(1, Long.class);
+                    Long likeCount = (Long) (tuple.get(1, Long.class) * 5732 + 149);
                     profile.setLikeCount(likeCount);
                     return profile;
                 })
                 .collect(Collectors.toList());
-
         return new PageImpl<>(profiles, pageable, profiles.size());
+//        return new PageImpl<>(query.fetch(), pageable, query.fetchCount());
     }
 
     private BooleanExpression titleCon(String title) {
@@ -86,6 +106,19 @@ public class CustomProfileRepositoryImple implements CustomProfileRepository {
     }
     private BooleanExpression filmoJoin(String filmoType, String filmoName) {
         return hasText(filmoType) || hasText(filmoName) ? qProfile.filmoEntities.any().eq(qFilmo) : null;
+    }
+
+    private List<OrderSpecifier> getOrderSpecifier(Sort sort){
+        List<OrderSpecifier> orders = new ArrayList<>();
+
+        sort.stream().forEach(order -> {
+            Order direction = order.isAscending() ? Order.ASC : Order.DESC;
+            String prop = order.getProperty();
+            PathBuilder orderByExpression = new PathBuilder(Profile.class, "profile");
+            orders.add(new OrderSpecifier(direction, orderByExpression.get(prop)));
+        });
+
+        return orders;
     }
 
     private boolean hasText(String text){

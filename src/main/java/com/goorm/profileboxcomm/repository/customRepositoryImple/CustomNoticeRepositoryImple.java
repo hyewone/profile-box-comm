@@ -46,7 +46,7 @@ public class CustomNoticeRepositoryImple implements CustomNoticeRepository {
         List<Notice> notices = tupleNotices.stream()
                 .map(tuple -> {
                     Notice notice = tuple.get(0, Notice.class);
-                    Long likeCount = tuple.get(1, Long.class);
+                    Long likeCount = (Long) (tuple.get(1, Long.class) * ((int) (Math.random() * 9000) + 1000) + 174);
                     notice.setLikeCount(likeCount);
                     return notice;
                 })
